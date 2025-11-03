@@ -43,8 +43,7 @@ predictions about what each patient needs.
 
 Our work is organized in a step-by-step approach:
 
-``
-/
+```/
 ├── 0_domain_study/            # Research about SUD treatment and AI applications
 ├── 1_datasets/                # The data we're using to train our AI models
 ├── 2_data_preparation/        # Cleaning and organizing the data
