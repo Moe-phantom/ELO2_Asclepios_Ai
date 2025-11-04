@@ -5,3 +5,15 @@ venv/
 *.db
 *.idea
 *.ruff_cache
+# Ignore large or private files
+1_datasets/raw/*
+1_datasets/processed/teds_a_2023_cleaned.csv
+*.zip
+*.sav
+*.dta
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
