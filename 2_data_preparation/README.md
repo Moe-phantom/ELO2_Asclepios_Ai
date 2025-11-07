@@ -73,30 +73,30 @@ Main data cleaning script that processes raw TEDS-A data.
 ### Demographics (10)
 
 - `patient_id`, `age_group`, `sex`, `race`, `ethnicity`, `marital_status`,
-- `education_level`, `employment_status`, `living_arrangement`, `income_source`
+`education_level`, `employment_status`, `living_arrangement`, `income_source`
 
 ### Treatment Planning (8)
 
 - `service_type`, `wait_time_days`, `referral_source`, `prior_treatments`,
-- `medication_assisted_therapy`, `dsm_diagnosis`, `self_help_attendance`, `payment_source`
+`medication_assisted_therapy`, `dsm_diagnosis`, `self_help_attendance`, `payment_source`
 
 ### Substance Use Profile (10)
 
 - `primary_substance`, `secondary_substance`, `tertiary_substance`,
-- `route_primary`, `route_secondary`, `route_tertiary`, `frequency_primary`,
-- `frequency_secondary`, `frequency_tertiary`, `age_first_use_primary`
+`route_primary`, `route_secondary`, `route_tertiary`, `frequency_primary`,
+`frequency_secondary`, `frequency_tertiary`, `age_first_use_primary`
 
 ### Clinical Indicators (11)
 
 - `injection_drug_use`, `years_using`, `number_of_substances`,
-- `substance_category`, `is_polysubstance`, `is_opioid_primary`,
-- `is_stimulant_primary`, `is_injection_user`, `has_cooccurring_mental_health`,
-- `has_mental_health_disorder`, `pregnant`
+`substance_category`, `is_polysubstance`, `is_opioid_primary`,
+`is_stimulant_primary`, `is_injection_user`, `has_cooccurring_mental_health`,
+`has_mental_health_disorder`, `pregnant`
 
 ### Risk Factors (6)
 
 - `recent_arrests`, `is_criminal_justice_referral`, `has_recent_arrest`,
-- `is_homeless`, `has_no_income`, `is_pregnant`
+`is_homeless`, `has_no_income`, `is_pregnant`
 
 ### Treatment History (2)
 
@@ -105,7 +105,7 @@ Main data cleaning script that processes raw TEDS-A data.
 ### Other (3)
 
 - `state`, `region`, `veteran_status`, `health_insurance`, `has_long_wait`,
-- `is_adolescent`, `is_older_adult`
+`is_adolescent`, `is_older_adult`
 
 ## Key Transformations
 
@@ -157,31 +157,6 @@ All columns renamed for clarity:
   - `education_level` (20.9%)
   - `wait_time_days` (53.7%)
   - Secondary/tertiary substances (expected)
-
-### State Exclusions
-
-Per TEDS codebook, the following states did not report sufficient data in 2023:
-
-- Delaware (STFIPS = 10)
-- South Carolina (STFIPS = 45)
-- West Virginia (STFIPS = 54)
-
-### Data Validation
-
-- Age vs. first use consistency checked
-- Pregnancy data validated (females only)
-- Route/substance alignment verified
-
-## Project Context
-
-This cleaned dataset serves as the foundation for:
-
-1. **Exploratory Data Analysis (EDA)** - Understanding treatment patterns and
-patient characteristics.
-2. **Feature Engineering** - Creating additional predictive features.
-3. **Machine Learning Models** - Predicting treatment outcomes and resource needs.
-4. **Resource Allocation Optimization** - Optimizing facility capacity and
-treatment planning.
 
 ## Contact & References
 
