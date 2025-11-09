@@ -3,9 +3,9 @@
 ## Overview
 
 This folder contains the data cleaning and preprocessing pipeline for the TEDS-A
-2023 dataset, used in the project: **Optimization of Treatment Planning and
-Resource Allocation in Substance Use Disorder (SUD) Rehabilitation Facilities
-using Artificial Intelligence and Predictive Analytics**.
+2023 dataset, used in the project: **Optimization of Treatment Planning and Resource**
+**Allocation in Substance Use Disorder (SUD) Rehabilitation Facilities using**
+**Artificial Intelligence and Predictive Analytics**.
 
 ## Dataset Information
 
@@ -15,11 +15,13 @@ using Artificial Intelligence and Predictive Analytics**.
 - **Original Variables:** 60 variables
 - **Cleaned Variables:** 50 relevant variables
 
+---
+
 ## Files
 
-### `tedsa_puf_2023.ipynb`
+### 1. `cleaning_preprocessing.ipynb`
 
-Main data cleaning script that processes raw TEDS-A data.
+**Purpose:** Main data cleaning script that processes raw TEDS-A data.
 
 **Pipeline Steps:**
 
@@ -31,7 +33,35 @@ Main data cleaning script that processes raw TEDS-A data.
 6. Select and rename 50 relevant columns
 7. Save cleaned dataset
 
-## Input/Output
+**Input:** `1_datasets/raw/tedsa_puf_2023.csv`  
+**Output:** `1_datasets/processed/teds_a_2023_cleaned.csv`
+
+---
+
+### 2. `missing_value_handling.ipynb`
+
+**Purpose:** Advanced missing value analysis and handling strategy for different
+analysis types.
+
+**Processing Steps:**
+
+1. Analyze missing value patterns and percentages
+2. Identify critical variables (cannot be missing)
+3. Create analysis-ready dataset (minimal removal, ~95% retention)
+4. Create ML-ready dataset (imputation, 100% retention)
+5. Generate missing value report
+
+**Input:** `1_datasets/processed/teds_a_2023_cleaned.csv`
+
+**Outputs:**
+
+- `1_datasets/processed/teds_analysis_ready.csv` - For statistical analysis
+(pairwise deletion)
+- `1_datasets/processed/teds_ml_ready.csv` - For machine learning (imputed values)
+
+---
+
+## Input/Output Summary
 
 ### Input
 
@@ -39,12 +69,41 @@ Main data cleaning script that processes raw TEDS-A data.
 - **Format:** CSV file with TEDS-A 2023 admission records
 - **Size:** ~1.6M rows × 60 columns
 
-### Output
+### Outputs
+
+#### 1. Primary Cleaned Dataset
 
 - **File:** `1_datasets/processed/teds_a_2023_cleaned.csv`
-- **Format:** CSV file with cleaned and processed data
-- **Size:** ~1.6M rows × 50 columns
+- **Records:** ~1.6M rows × 50 columns
 - **Features:** Human-readable column names and decoded categorical values
+- **Use:** EDA
+- **Missing Data:** Preserved as NaN
+
+#### 2. Analysis-Ready Dataset
+
+- **File:** `1_datasets/processed/teds_analysis_ready.csv`
+- **Records:** ~1.54M rows (95% retention)
+- **Strategy:** Minimal removal - only rows missing critical variables
+- **Use:** Statistical hypothesis testing, correlation analysis
+- **Missing Data:** Present in non-critical variables (handled via pairwise deletion)
+
+#### 3. ML-Ready Dataset
+
+- **File:** `1_datasets/processed/teds_ml_ready.csv`
+- **Records:** ~1.6M rows (100% retention)
+- **Strategy:** Statistical imputation (median/mode)
+- **Use:** Machine learning model training
+- **Missing Data:** None (imputed)
+
+#### 4. Sample Dataset
+
+- **File:** `1_datasets/sample/tedsa_sample.csv`
+- **Records:** 1000 rows (0.0625% retention)
+- **Strategy:** Sampling
+- **Use:** visualization, initial exploration
+- **Missing Data:** almost all
+
+---
 
 ## Engineered Features (17 New Variables)
 
@@ -68,6 +127,8 @@ Main data cleaning script that processes raw TEDS-A data.
 | `has_no_income` | No source of income | Binary |
 | `has_mental_health_disorder` | Co-occurring mental health disorder | Binary |
 
+---
+
 ## Final Variables (50 Columns)
 
 ### Demographics (10)
@@ -78,7 +139,8 @@ Main data cleaning script that processes raw TEDS-A data.
 ### Treatment Planning (8)
 
 - `service_type`, `wait_time_days`, `referral_source`, `prior_treatments`,
-`medication_assisted_therapy`, `dsm_diagnosis`, `self_help_attendance`, `payment_source`
+`medication_assisted_therapy`, `dsm_diagnosis`, `self_help_attendance`,
+`payment_source`
 
 ### Substance Use Profile (10)
 
@@ -106,6 +168,8 @@ Main data cleaning script that processes raw TEDS-A data.
 
 - `state`, `region`, `veteran_status`, `health_insurance`, `has_long_wait`,
 `is_adolescent`, `is_older_adult`
+
+---
 
 ## Key Transformations
 
@@ -138,27 +202,82 @@ All columns renamed for clarity:
 | `NOPRIOR` | `prior_treatments` |
 | `LIVARAG` | `living_arrangement` |
 
+---
+
+## Data Quality Notes
+
+### Missing Data Strategy
+
+1. **Minimal Removal (Analysis-Ready)** - Recommended for statistical tests
+   - Remove only rows missing: `patient_id`, `service_type`, `primary_substance`
+, `age_group`, `sex`
+   - Retains ~95% of data
+   - Uses pairwise deletion for remaining variables
+   - Maximizes statistical power
+
+1. **Imputation (ML-Ready)** - For machine learning
+   - Median for continuous variables
+   - Mode for categorical variables
+   - 0 for binary flags
+   - Retains 100% of data
+
+### Missing Data Patterns
+
+Key variables with high missing rates (>20%):
+
+- `wait_time_days` (53.7%)
+- `payment_source` (53.4%)
+- `income_source` (34.6%)
+- `marital_status` (29.2%)
+- `education_level` (20.9%)
+
+---
+
+## Workflow
+
+### Step 1: Data Cleaning
+
+```bash
+# Run main cleaning notebook
+jupyter notebook cleaning_preprocessing.ipynb
+```
+
+**Output:** `teds_a_2023_cleaned.csv`
+
+### Step 2: Missing Value Handling
+
+```bash
+# Run missing value handling notebook
+jupyter notebook missing_value_handling.ipynb
+```
+
+**Outputs:**
+
+- `teds_analysis_ready.csv`
+- `teds_ml_ready.csv`
+
+### Step 3: Choose Dataset for Your Analysis
+
+- **For EDA:** Use `teds_a_2023_cleaned.csv`
+- **For Statistical Tests:** Use `teds_analysis_ready.csv`
+- **For ML Models:** Use `teds_ml_ready.csv`
+
+---
+
 ## Usage
 
 ### As Jupyter Notebook
 
-1. Open `tedsa_puf_2023.ipynb`
-2. Update file paths in the last cell if needed
+#### Main Cleaning
+
+1. Open `cleaning_preprocessing.ipynb`
+2. Update file paths if needed
 3. Run all cells sequentially
 4. Cleaned data will be saved automatically
 
-## Data Quality Notes
+#### Missing Value Handling
 
-### Missing Data
-
-- Missing data patterns preserved for analysis
-- Key variables with high missing rates (>20%):
-  - `marital_status` (29.2%)
-  - `education_level` (20.9%)
-  - `wait_time_days` (53.7%)
-  - Secondary/tertiary substances (expected)
-
-## Contact & References
-
-- **Data Source:** [SAMHSA TEDS Website](https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set)
-- **Codebook:** TEDS-A 2023 Public Use File Codebook (SAMHSA, 2025)
+1. Open `missing_value_handling.ipynb`
+2. Ensure cleaned dataset exists
+3. Run all cells sequentially
+4. Two datasets will be created for different analyses
