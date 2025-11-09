@@ -222,8 +222,7 @@ Cleaned Data (teds_a_2023_cleaned.csv)
 
 > **Note:** The TEDS-A dataset is not included in this repository due to size
 and data governance considerations.  
-> To reproduce analyses, download the dataset directly from
-[SAMHSA TEDS Data](https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set/datafiles)  
+> To reproduce analyses, download the dataset directly from SAMHSA TEDS Data.
 > and place it in the `1_datasets/raw/` folder.
 
 ### Reproducing Results
