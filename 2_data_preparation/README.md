@@ -1,4 +1,4 @@
-# Data Cleaning Pipeline
+# Data Cleaning Pipeline For Teds-A Dataset
 
 ## Overview
 
@@ -19,7 +19,7 @@ This folder contains the data cleaning and preprocessing pipeline for the TEDS-A
 
 ## Files
 
-### 1. `cleaning_preprocessing.ipynb`
+### 1. `cleaning_teds_a.ipynb`
 
 **Purpose:** Main data cleaning script that processes raw TEDS-A data.
 
@@ -38,7 +38,7 @@ This folder contains the data cleaning and preprocessing pipeline for the TEDS-A
 
 ---
 
-### 2. `missing_value_handling.ipynb`
+### 2. `missing_value_handling_teds_a.ipynb`
 
 **Purpose:** Advanced missing value analysis and handling strategy for different
 analysis types.
@@ -239,7 +239,7 @@ Key variables with high missing rates (>20%):
 
 ```bash
 # Run main cleaning notebook
-jupyter notebook cleaning_preprocessing.ipynb
+jupyter notebook cleaning_teds_a.ipynb
 ```
 
 **Output:** `teds_a_2023_cleaned.csv`
@@ -248,7 +248,7 @@ jupyter notebook cleaning_preprocessing.ipynb
 
 ```bash
 # Run missing value handling notebook
-jupyter notebook missing_value_handling.ipynb
+jupyter notebook missing_value_handling_teds_a.ipynb
 ```
 
 **Outputs:**
@@ -270,14 +270,14 @@ jupyter notebook missing_value_handling.ipynb
 
 #### Main Cleaning
 
-1. Open `cleaning_preprocessing.ipynb`
+1. Open `cleaning_teds_a.ipynb`
 2. Update file paths if needed
 3. Run all cells sequentially
 4. Cleaned data will be saved automatically
 
 #### Missing Value Handling
 
-1. Open `missing_value_handling.ipynb`
+1. Open `missing_value_handling_teds_a.ipynb`
 2. Ensure cleaned dataset exists
 3. Run all cells sequentially
 4. Two datasets will be created for different analyses
