@@ -1,189 +1,236 @@
-# 📊 Datasets: Guide
+# Datasets Folder
 
-This folder is dedicated to storing all **datasets** used in the Asclepios
- AI project — an AI-powered platform designed to predict optimal treatment
-  duration and prevent costly readmissions for patients undergoing Substance
-   Use Disorder (SUD) treatment.
+## Overview
 
----
+This folder contains all datasets for the **Optimization of Treatment**
+**Planning and Resource Allocation in Substance Use Disorder (SUD)**
+**Rehabilitation Facilities** project. Data is organized into raw and
+processed subfolders following best practices for reproducible research.
 
-## 🧠 Purpose
+## Folder Structure
 
-To ensure **reproducibility** and **data transparency**, all raw datasets should
- be stored here exactly as downloaded. You may clean, preprocess, or enrich
-  them, but **never overwrite or modify the originals**.
-
----
-
-## 🗂️ Folder Structure Example
-
-```/datasets
-│
+```text
+1_datasets/
 ├── raw/
-│   ├── teds_treatment_episodes.raw.csv
-│   ├── nsduh_substance_use.raw.csv
-│
+│   └── tedsa_puf_2023.csv
 ├── processed/
-│   ├── cleaned_treatment_data.csv
-│   ├── patient_predictions_ready.csv
-│
+│   ├── teds_a_2023_cleaned.csv
+│   ├── teds_analysis_ready.csv
+│   └── teds_ml_ready.csv
+├──sample/
+│    └── tedsa_sample.csv
 └── README.md
 ```
 
 ---
 
-## 📑 Dataset Documentation
+## Raw Data
 
-### 1. SAMHSA Treatment Episode Dataset (TEDS)
+### `raw/tedsa_puf_2023.csv`
 
-- **Source:** [SAMHSA.gov Data Portal](https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set)
-- **Description:** National data system on admissions to and discharges from
- substance abuse treatment facilities.
-- **Data Type:** Structured (Tabular)
-- **Format:** CSV
-- **Use in Project:** Train model to predict optimal treatment duration and
- readmission risk.
+**Source:** SAMHSA (Substance Abuse and Mental Health Services Administration)  
+**Dataset:** Treatment Episode Data Set - Admissions (TEDS-A), 2023 Public Use
+File  
+**Download:** [SAMHSA TEDS Data](https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set/datafiles)
 
-### 2. UCI Drug Consumption Dataset
+**Characteristics:**
 
-- **Source:** [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Drug+consumption+%28quantified%29)
-- **Description:** Self-reported data on drug consumption and related
- demographic variables.
-- **Data Type:** Structured (Tabular)
-- **Format:** CSV
-- **Use in Project:** Explore correlation between demographics, personality
- traits, and substance use patterns.
+- **Records:** ~1,625,833 admission records
+- **Variables:** 60 variables
+- **Year:** 2023 admissions
+- **Coverage:** 50 U.S. states, DC, Puerto Rico (excluding Delaware, South
+Carolina, West Virginia)
+- **Format:** CSV with numeric codes for categorical variables
+- **Size:** ~800 MB
 
-### 3. National Survey on Drug Use and Health (NSDUH)
+**Key Variables:**
 
-- **Source:** [SAMHSA Data Files](https://www.datafiles.samhsa.gov/)
-- **Description:** Annual survey on the use of tobacco, alcohol, illicit drugs,
- and mental health in the U.S.
-- **Data Type:** Structured (Tabular, Time Series)
-- **Format:** CSV / XLSX
-- **Use in Project:** Feature engineering for population-level risk prediction
- and treatment outcome benchmarking.
+- Demographics: Age, sex, race, ethnicity, education, employment
+- Substance use: Primary/secondary/tertiary substances, route, frequency, age
+at first use
+- Treatment: Service type, referral source, prior episodes, medication-assisted therapy
+- Clinical: DSM diagnosis, co-occurring mental health disorders
+- Socioeconomic: Income, insurance, living arrangement, arrests
+- Geographic: State, region, CBSA codes
 
-### 4. Synthetic Treatment Dataset
+**Data Restrictions:**
 
-- **Source:** Generated using [Synthetic Data Vault (SDV)](https://sdv.dev/)
- or [YData Synthetic](https://ydata.ai/products/ydata-synthetic)
-- **Description:** Artificial patient-level data simulating real clinical
- treatment records.
-- **Data Type:** Structured (Tabular)
-- **Format:** CSV / SQLite
-- **Use in Project:** Model testing, EDA, and algorithm benchmarking when real
- data is restricted.
+- Public use file with disclosure protection measures
+- Data swapping applied to protect confidentiality
+- Some geographic detail suppressed for small populations
 
 ---
 
-## 📘 Types of Datasets
+## Processed Data
 
-### **Classification by Data Type**
+### `processed/teds_a_2023_cleaned.csv`
 
-| Type | Description | Example |
-|------|--------------|----------|
-| Continuous | Can take any real value | Blood pressure, time in treatment |
-| Discrete | Countable quantities | Number of therapy sessions |
-| Nominal | Categories without order | Gender, facility name |
-| Ordinal | Ordered categories | Treatment stage (early, mid, late) |
-| Binary | Two possible outcomes | Readmission (yes/no) |
-| Time Series | Sequential data over time | Patient recovery progress |
+**Created by:** `2_data_preparation\cleaning_preprocessing.ipynb`  
+**Purpose:** Fully cleaned and human-readable dataset for all analyses
 
----
+**Processing Steps:**
 
-### **Classification by Structure**
+1. Missing value codes (-9) converted to NaN
+2. Data types optimized (categorical, Int8, Int64)
+3. 17 new features engineered for treatment optimization
+4. Categorical codes decoded to readable labels
+5. 50 relevant variables selected and renamed
 
-- **Structured Data:** CSV, Excel, SQL tables  
-- **Semi-Structured Data:** JSON, XML (EHRs)  
-- **Unstructured Data:** Clinical notes, text summaries
+**Characteristics:**
 
----
+- **Records:** ~1,625,833 (all original records retained)
+- **Variables:** 50 variables
+- **Format:** CSV with human-readable text labels
+- **Size:** ~240 MB (70% reduction from raw)
+- **Missing Data:** Preserved as NaN for proper handling
 
-### **Classification by Collection Method**
+**Variables:** See main project README or data dictionary for complete list
 
-- **Primary Data:** Collected directly through surveys or treatment centers  
-- **Secondary Data:** Published datasets (e.g., TEDS, NSDUH)  
-- **Synthetic Data:** Generated for simulation and model testing  
-- **Observational Data:** Real-world treatment outcomes  
-- **Experimental Data:** Controlled clinical trials
+**Use Cases:**
 
----
-
-### **Classification by Size and Complexity**
-
-- **Small Data:** Patient-level samples (< 10k rows)
-- **Big Data:** Aggregated health records (> 1M rows)
-- **High-Dimensional:** Many features (psychological, behavioral, demographic variables)
+- Exploratory Data Analysis (EDA)
+- Initial statistical exploration
+- Visualization and reporting
+- General data inspection
 
 ---
 
-### **Classification by Access Type**
+### `processed/teds_analysis_ready.csv`
 
-| Type | Access | Example |
-|------|---------|----------|
-| Public | Freely available | UCI, SAMHSA datasets |
-| Private | Restricted | Hospital records |
-| Proprietary | Paid / Licensed | Clinical research databases |
+**Created by:** `2_data_preparation\missing_value_handling.ipynb`  
+**Purpose:** Optimized for statistical analysis with minimal data loss
 
----
+**Processing Steps:**
 
-### **Classification by Purpose**
+- Removed rows missing critical variables only:
+  - `patient_id`
+  - `service_type`
+  - `primary_substance`
+  - `age_group`
+  - `sex`
+- All other missing values preserved for pairwise deletion
 
-- **Transactional:** Treatment logs, appointments  
-- **Analytical:** Aggregated outcome metrics  
-- **Master:** Patient demographics, facility info  
-- **Metadata:** Dataset descriptions, schema info  
+**Characteristics:**
 
----
+- **Records:** ~1,540,000 (95% retention)
+- **Variables:** 50 variables
+- **Missing Data:** Present in non-critical variables
+- **Strategy:** Pairwise deletion (each test uses available data)
 
-### **Classification by Format**
+**Use Cases:**
 
-| Format | Description | Example |
-|---------|-------------|----------|
-| CSV / XLSX | Tabular | patient_data.csv |
-| JSON | Semi-structured | patient_record.json |
-| SQLite | Lightweight DB | treatment.db |
-| GeoJSON | Spatial | facility_locations.geojson |
-| Time Series | Temporal | relapse_trends.csv |
+- Statistical hypothesis testing
+- Correlation analysis
+- Chi-square tests
+- Group comparisons (t-tests, ANOVA, Mann-Whitney)
+- Regression analysis
 
----
+**Advantages:**
 
-## 🔍 Data Quality Checklist
-
-- **Completeness:** Handle missing values carefully  
-- **Accuracy:** Validate entries, detect outliers  
-- **Consistency:** Ensure logical coherence  
-- **Timeliness:** Prefer recent and updated data  
-- **Ethics:** Anonymize sensitive patient information  
+- Maximizes statistical power
+- Minimizes selection bias
+- Standard practice in epidemiological research
 
 ---
 
-## ⚖️ Ethical Considerations
+### `processed/teds_ml_ready.csv`
 
-- Respect patient privacy (HIPAA, GDPR compliance)  
-- Avoid bias in model training (gender, race, socioeconomic)  
-- Use transparent methods and cite data sources properly  
-- Provide opt-out or anonymization mechanisms for sensitive data  
+**Created by:** `2_data_preparation\missing_value_handling.ipynb`  
+**Purpose:** Imputed dataset ready for machine learning models
+
+**Processing Steps:**
+
+1. **Numeric variables:** Imputed with median
+   - `years_using`, `number_of_substances`
+
+2. **Categorical variables:** Imputed with mode
+   - `wait_time_days`, `prior_treatments`, `employment_status`
+   - `education_level`, `living_arrangement`, `income_source`
+
+3. **Binary variables:** Imputed with 0 (negative/absent)
+   - All `is_*` and `has_*` flags
+
+**Characteristics:**
+
+- **Records:** ~1,625,833 (100% retention)
+- **Variables:** 50 variables
+- **Missing Data:** Imputed (no NaN values)
+- **Strategy:** Statistical imputation
+
+**Use Cases:**
+
+- Machine learning model training
+- Predictive modeling
+- Classification and regression algorithms
+- Neural networks
+- Ensemble methods
+
+**Important Notes:**
+
+- Imputation may introduce bias
+- Use with caution for inferential statistics
+- Document imputation methods in model cards
+- Consider multiple imputation for sensitivity analysis
 
 ---
 
-## 🧩 Example Dataset Naming Conventions
+## Data Quality Summary
 
-| Type | Example Name |
-|------|---------------|
-| Raw | `treatment_records.raw.csv` |
-| Cleaned | `treatment_records.cleaned.csv` |
-| Processed | `patient_outcomes_model_ready.csv` |
-| Synthetic | `synthetic_patient_data.csv` |
+| Dataset | Records | Missing Data | Data Loss | Primary Use |
+|---------|---------|--------------|-----------|-------------|
+| **Raw** | 1,625,833 | Yes (-9 codes) | 0% | Source data |
+| **Cleaned** | 1,625,833 | Yes (NaN) | 0% | EDA, visualization |
+| **Analysis Ready** | ~1,540,000 | Yes (non-critical) | ~5% | Statistical test|
+| **ML Ready** | 1,625,833 | No (imputed) | 0% | Machine learning |
+
+---
+
+## Missing Data Patterns
+
+### High Missing Variables (>20%)
+
+- `wait_time_days`: 53.7%
+- `marital_status`: 29.2%
+- `income_source`: 34.6%
+- `education_level`: 20.9%
+- `payment_source`: 53.4%
+
+### Low Missing Variables (<5%)
+
+- `patient_id`: 0%
+- `age_group`: 0%
+- `sex`: 0.1%
+- `service_type`: 0%
+- `primary_substance`: 18.2%
 
 ---
 
-### 🧷 Notes
+## Data Processing Pipeline
 
-This dataset documentation ensures anyone can **clone, replicate, and validate**
- your results with minimal effort. Always keep your **data lineage**
-  (raw → cleaned → processed) clear and traceable.
+```text
+Raw Data (tedsa_puf_2023.csv)
+    ↓
+[Data Cleaning Pipeline]
+    ↓
+Cleaned Data (teds_a_2023_cleaned.csv)
+    ↓
+[Missing Value Strategy]
+    ↓
+    ├── Analysis Ready (95% data, pairwise deletion)
+    └── ML Ready (100% data, imputation)
+```
 
----
-© 2025 Asclepios AI — All Rights Reserved.
+> **Note:** The TEDS-A dataset is not included in this repository due to size
+and data governance considerations.  
+> To reproduce analyses, download the dataset directly from SAMHSA TEDS Data.
+> and place it in the `1_datasets/raw/` folder.
+
+### Reproducing Results
+
+To reproduce cleaning and preprocessing:
+
+1. Download `tedsa_puf_2023.csv`
+2. Place it in `1_datasets/raw/`
+3. Run `2_data_preparation/cleaning_preprocessing.ipynb` and
+`2_data_preparation\missing_value_handling.ipynb`
+4. Output files will appear in `1_datasets/processed/`
