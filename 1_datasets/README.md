@@ -64,6 +64,8 @@ at first use
 - Data swapping applied to protect confidentiality
 - Some geographic detail suppressed for small populations
 
+---
+
 ### `raw/tedsd_puf_2023.csv`
 
 **Source:** SAMHSA (Substance Abuse and Mental Health Services Administration)  
@@ -73,7 +75,7 @@ File
 
 **Characteristics:**
 
-- **Records:** ~1,400,000 discharge records
+- **Records:** ~1,474,000 discharge records
 - **Variables:** ~50 variables
 - **Year:** 2023 discharges
 - **Coverage:** 50 U.S. states, DC, Puerto Rico
@@ -124,14 +126,28 @@ File
 **Created by:** `2_data_preparation/cleaning_teds_d.ipynb`  
 **Purpose:** Fully cleaned TEDS-D dataset, human-readable
 
-**Processing Steps:** Mirrors TEDS-A cleaning
+**Processing Steps:**
+
+1. Missing value codes (-9) converted to NaN
+2. Data types optimized (categorical, Int8, Int64)
+3. New features engineered for treatment optimization
+4. Categorical codes decoded to readable labels
+5. Relevant variables selected and renamed
 
 **Characteristics:**
 
-- **Records:** ~1,400,000
-- **Variables:** ~70 variables
+- **Records:** ~1,474,000 (all original records retained)
+- **Variables:** 74 variables
 - **Format:** CSV with human-readable text labels
-- **Missing Data:** Preserved as NaN
+- **Size:** ~500MB
+- **Missing Data:** Preserved as NaN for proper handling
+
+**Use Cases:**
+
+- Exploratory Data Analysis (EDA)
+- Initial statistical exploration
+- Visualization and reporting
+- General data inspection
 
 ---
 
@@ -171,17 +187,25 @@ File
 - Minimizes selection bias
 - Standard practice in epidemiological research
 
+---
+
 ### `processed/teds_d_analysis_ready.csv`
 
-**Created by:** `2_data_preparation\missing_value_handling_teds_d.ipynb`  
+**Created by:** `2_data_preparation/missing_value_handling_teds_d.ipynb`  
 **Purpose:** Optimized for statistical analysis with minimal data loss
 
-**Processing Steps:** Mirrors TEDS-A cleaning
+**Processing Steps:**
+
+- Removed rows missing critical variables only:
+  - `patient_id`
+  - `discharge_reason`
+  - `length_of_stay`
+- All other missing values preserved for pairwise deletion
 
 **Characteristics:**
 
-- **Records:** ~1,40,000 (95% retention)
-- **Variables:** `70 variables
+- **Records:** ~1,400,000 (95% retention)
+- **Variables:** 74 variables
 - **Missing Data:** Present in non-critical variables
 - **Strategy:** Pairwise deletion (each test uses available data)
 
@@ -242,20 +266,37 @@ File
 
 ### `processed/teds_d_ml_ready.csv`
 
-**Created by:** `2_data_preparation\missing_value_handling_teds_d.ipynb`  
+**Created by:** `2_data_preparation/missing_value_handling_teds_d.ipynb`  
 **Purpose:** Imputed dataset ready for machine learning models
 
-**Processing Steps:** Mirrors TEDS-A Cleaning
+**Processing Steps:**
 
-1. **Binary variables:** Imputed with 0 (negative/absent)
+1. **Numeric variables:** Imputed with median
+   - `years_using`, `number_of_substances_admit`, `number_of_substances_discharge`
+
+2. **Categorical variables:** Imputed with mode
+   - `wait_time_days`, `prior_treatments`, `employment_admit`, `employment_discharge`
+   - `education_level`, `living_arrangement_admit`, `living_arrangement_discharge`
+   - `income_source`, `length_of_stay`, `discharge_reason`
+
+3. **Binary variables:** Imputed with 0 (negative/absent)
    - All `is_*` and `has_*` flags
+   - Treatment outcomes: `completed_treatment`, `dropped_out`, `terminated`, `transferred`
+   - Stay indicators: `short_stay`, `long_stay`
+   - Improvement metrics: `employment_improved`, `housing_improved`, `arrests_reduced`
+
+4. **Remaining variables:** Imputed based on data type
+   - Categorical: mode or 'Unknown'
+   - Numeric: median or 0
+   - Includes: demographics (sex, race, ethnicity, marital_status), arrests
+data, substance details, clinical variables
 
 **Characteristics:**
 
-- **Records:** ~1,0,000 (100% retention)
-- **Variables:** ~70 variables
-- **Missing Data:** Imputed (no NaN values)
-- **Strategy:** Statistical imputation
+- **Records:** 1,474,025 (100% retention)
+- **Variables:** 74 variables
+- **Missing Data:** None (fully imputed)
+- **Strategy:** Statistical imputation (median/mode/zero-filling)
 
 **Use Cases:**
 
@@ -282,14 +323,14 @@ File
 | **Cleaned TEDS-A** | 1,625,833 | Yes (NaN) | 0% | EDA, visualization |
 | **Analysis Ready TEDS-A** | ~1,540,000 | Yes (non-critical) | ~5% | tests |
 | **ML Ready TEDS-A** | 1,625,833 | No (imputed) | 0% | Machine learning |
-| **Raw TEDS-D** | 1,400,000 | Yes (-9 codes) | 0% | Source data |
-| **Cleaned TEDS-D** | 1,400,000 | Yes (NaN) | 0% | EDA, visualization |
+| **Raw TEDS-D** | 1,474,025 | Yes (-9 codes) | 0% | Source data |
+| **Cleaned TEDS-D** | 1,474,025 | Yes (NaN) | 0% | EDA, visualization |
 | **Analysis Ready TEDS-D** | ~1,400,000 | Yes (non-critical) | ~5% | tests |
-| **ML Ready TEDS-D** | 1,400,000 | No (imputed) | 0% | Machine learning |
+| **ML Ready TEDS-D** | 1,474,025 | No (imputed) | 0% | Machine learning |
 
 ---
 
-## Missing Data Patterns
+## Missing Data Patterns - TEDS-A
 
 ### High Missing Variables (>20%)
 
@@ -306,6 +347,29 @@ File
 - `sex`: 0.1%
 - `service_type`: 0%
 - `primary_substance`: 18.2%
+
+---
+
+## Missing Data Patterns - TEDS-D
+
+### High Missing Variables (>50%)
+
+- `arrests_discharge`: 95.7%
+- `arrests_admit`: 94.2%
+- `tertiary_substance_discharge`: 84.7%
+- `tertiary_substance_admit`: 82.0%
+- `pregnant`: 67.4%
+- `health_insurance`: 58.1%
+- `payment_source`: 56.5%
+
+### Low Missing Variables (<2%)
+
+- `patient_id`: 0%
+- `age_group`: 0%
+- `sex`: 0.06%
+- `service_type_admit`: 0%
+- `discharge_reason`: 0%
+- `length_of_stay`: 0%
 
 ---
 
