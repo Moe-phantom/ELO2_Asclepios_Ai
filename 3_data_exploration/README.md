@@ -10,7 +10,7 @@ broader TEDS data used for demonstration and research purposes only.
 
 Exploration & Analysis
 
-1. Demographic & Background Exploration
+## 1. Demographic & Background Exploration
 
 The dataset includes individuals from multiple regions, with the
 distribution across states showing noticeable variation.
@@ -34,7 +34,7 @@ Conclusion: The dataset shows regional variation with the West most
 represented, and moderate educational attainment levels centered around
 high school completion.
 
-1. Population Characteristics
+## 2. Population Characteristics
 
 Age Distribution:
 
@@ -63,7 +63,7 @@ Marital Status:
 - Now married: 9.7%
 ![Demographic Distribution](https://i.postimg.cc/w3Fz8GKd/1-dimographic-distribution.png)
 
-1. Substance Use Patterns
+## 3. Substance Use Patterns
 
 Primary Substance:
 
@@ -92,7 +92,7 @@ opioids and stimulants. Long duration of use (median 16 years) indicates
 chronic patterns.
 ![Substance Pattern](https://i.postimg.cc/xqgQD4rf/2-substance-battern.png)
 
-### 4. Treatment History Exploration
+## 4. Treatment History Exploration
 
 Prior Treatment Episodes:
 
@@ -129,6 +129,7 @@ Referral Sources:
 - Criminal justice/DUI/DWI: 20.5%
 - Alcohol/drug provider: 8.2%
 - Other healthcare: 6.9%
+![Referral Sources](https://i.postimg.cc/tYTjXNyP/10-Refferral-sources.png)
 
 ### 6. Payment Sources
 
@@ -193,9 +194,6 @@ Among those with five or more prior episodes:
 
 Conclusion: Co-occurring mental health is common among individuals with
 chronic treatment patterns.
-Self-referral (38.1%) and criminal justice (20.5%) are primary entry cause
-for referral
-![Referral Sources](https://i.postimg.cc/tYTjXNyP/10-Refferral-sources.png)
 
 Key Takeaways
 
